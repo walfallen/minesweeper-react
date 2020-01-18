@@ -25,7 +25,28 @@
 		"@typescript-eslint"
 	],
 	"rules": {
+		"import/no-unresolved": [
+			"error"
+		],
+		"import/extensions": [
+			"error",
+			"ignorePackages",
+			{
+				"ignorePackages": true,
+				"pattern": {
+					"js": "never",
+					"jsx": "never",
+					"ts": "never",
+					"tsx": "never"
+				}
+			}
+		],
+		"indent": [
+			"error",
+			"tab"
+		],
 		"linebreak-style": "off",
+		"no-plusplus": "off",
 		"no-tabs": "off",
 		"react/jsx-indent": [
 			"error",
@@ -39,5 +60,17 @@
 				]
 			}
 		]
+	},
+	"settings": {
+		"import/resolver": {
+			"node": {
+				"extensions": [
+					".ts",
+					".tsx",
+					".js",
+					".jsx"
+				]
+			}
+		}
 	}
 }

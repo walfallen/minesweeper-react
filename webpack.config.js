@@ -51,20 +51,26 @@ module.exports = (env, argv) => {
 						{
 							loader: 'css-loader',
 							options: {
-								url: false,
 								sourceMap: mode === 'development'
 							}
 						},
 						{
 							loader: 'sass-loader',
 							options: {
-								url: false,
 								sourceMap: mode === 'development'
 							}
 						},
 					],
 				}
 			]
+		},
+		resolve: {
+			extensions: [
+				'.ts',
+				'.tsx',
+				'.js',
+				'.jsx',
+			],
 		},
 		plugins: [
 			new MiniCssExtractPlugin({
