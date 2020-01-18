@@ -2,6 +2,50 @@
 .square {
 	width: 48px;
 	height: 48px;
-	background: gray;
+	background: radial-gradient(#84d6fc, #71acf2);
 	border-radius: 3px;
+	text-align: center;
+	line-height: 48px;
+	font-size: 18pt;
+	font-family: Arial, Helvetica, sans-serif;
+	font-weight: bold;
+	cursor: pointer;
+	vertical-align: top;
+
+	&.uncovered {
+		background: radial-gradient(#ffffff, #d2d6d5);
+		text-shadow: rgb(80, 80, 80) 0 0 3px;
+
+		&.indicator-1 {
+			color: rgb(51, 169, 216);
+		}
+
+		&.indicator-2 {
+			color: rgb(230, 226, 0);
+		}
+
+		&.indicator-3 {
+			color: rgb(223, 52, 109);
+		}
+
+		&.indicator-4 {
+			color: rgb(31, 153, 31);
+		}
+
+		&.indicator-5 {
+			color: rgb(141, 0, 141);
+		}
+
+		&.indicator-6 {
+			color: rgb(66, 18, 129);
+		}
+
+		&.indicator-7 {
+			color: rgb(116, 3, 3);
+		}
+
+		&.indicator-8 {
+			color: rgb(59, 21, 21);
+		}
+	}
 }
