@@ -8,13 +8,13 @@ interface SquareProps {
 }
 
 enum Status {
-	Covered,
-	Uncovered,
-	Flagged,
-	Exploded,
+	None,
+	Flag,
+	Bomb,
 }
 
 interface SquareState {
+	uncovered: boolean;
 	status: Status;
 	indicator: number;
 }
@@ -24,38 +24,40 @@ export default class Square extends React.Component<SquareProps, SquareState> {
 		super(props);
 
 		this.state = {
-			status: Status.Covered,
+			uncovered: false,
+			status: Status.None,
 			indicator: 0,
 		};
 	}
 
 	render(): JSX.Element {
 		const {
+			uncovered,
 			status,
 			indicator,
 		} = this.state;
 
+		let icon = null;
 		const classNames = ['square'];
-		switch (status) {
-		case Status.Uncovered:
+		if (uncovered) {
 			classNames.push('uncovered');
+
 			if (indicator > 0) {
 				classNames.push(`indicator-${indicator}`);
 			}
-			break;
-		case Status.Flagged:
-			classNames.push('flagged');
-			break;
-		case Status.Exploded:
-			classNames.push('exploded');
-			break;
-		default:
-			classNames.push('covered');
+			if (status === Status.Flag) {
+				icon = 'flag';
+			}
+		}
+
+		if (status === Status.Bomb) {
+			icon = 'bomb';
 		}
 
 		return (
 			<div className={classNames.join(' ')}>
 				{indicator > 0 ? indicator : null}
+				{icon && <span className={icon} />}
 			</div>
 		);
 	}

@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="189" height="189" viewBox="0 0 1890 1890">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #e70505;
+        fill-rule: evenodd;
+      }
+    </style>
+  </defs>
+  <path id="矩形_1" data-name="矩形 1" class="cls-1" d="M560,167l999.13,737.364-2,.918L560,1238V167Z"/>
+  <rect id="圆角矩形_1" data-name="圆角矩形 1" x="495" y="117" width="75" height="1668" rx="10" ry="10"/>
+  <ellipse id="椭圆_1" data-name="椭圆 1" cx="532.5" cy="1785.5" rx="101.5" ry="40.5"/>
+</svg>
