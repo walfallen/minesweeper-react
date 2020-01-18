@@ -51,17 +51,21 @@ module.exports = (env, argv) => {
 						{
 							loader: 'css-loader',
 							options: {
-								sourceMap: mode === 'development'
+								sourceMap: mode === 'development',
 							}
 						},
 						{
 							loader: 'sass-loader',
 							options: {
-								sourceMap: mode === 'development'
+								sourceMap: mode === 'development',
 							}
 						},
 					],
-				}
+				},
+				{
+					test: /\.(png|jpe?g|gif|svg)$/i,
+					use: 'file-loader',
+				},
 			]
 		},
 		resolve: {
