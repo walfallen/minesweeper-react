@@ -1,0 +1,36 @@
+html {
+	height: 100%;
+}
+
+body {
+	margin: 0;
+	padding: 0;
+	background: #31363c;
+	height: 100%;
+	font-family: Verdana, Tahoma, sans-serif;
+}
+
+#root {
+	background: linear-gradient(#0d1114, #252729 14%, #31363c 100%) no-repeat;
+
+	h1 {
+		margin: 0;
+		text-transform: uppercase;
+		display: block;
+		height: 88px;
+		line-height: 88px;
+		font-size: 20pt;
+		color: white;
+		text-align: center;
+	}
+}
+
+footer {
+	height: 68px;
+	line-height: 68px;
+	color: gray;
+	text-align: right;
+	padding: 10px 40px;
+	font-size: 8pt;
+}
+
