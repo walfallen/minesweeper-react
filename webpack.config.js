@@ -17,7 +17,8 @@ module.exports = (env, argv) => {
 			path: path.resolve(__dirname, 'dist/static')
 		},
 		devServer: {
-			contentBase: './dist',
+            contentBase: './dist',
+            publicPath: '/static/',
 		},
 		optimization: {
 			splitChunks: {
