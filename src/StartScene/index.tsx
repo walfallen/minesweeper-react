@@ -6,30 +6,23 @@ interface StartSceneProps {
 	onModeChanged: (mode: string) => void;
 }
 
-interface StartSceneState {
-}
-
-export default class StartScene extends React.Component<StartSceneProps, StartSceneState> {
-	constructor(props: StartSceneProps) {
-		super(props);
-	}
-
-	enterExpertMode = () => {
+export default class StartScene extends React.Component<StartSceneProps, {}> {
+	enterExpertMode = (): void => {
 		const { onModeChanged } = this.props;
 		setTimeout(onModeChanged, 0, 'expert');
 	}
 
-	enterMediumMode = () => {
+	enterMediumMode = (): void => {
 		const { onModeChanged } = this.props;
 		setTimeout(onModeChanged, 0, 'medium');
 	}
 
-	enterEasyMode = () => {
+	enterEasyMode = (): void => {
 		const { onModeChanged } = this.props;
 		setTimeout(onModeChanged, 0, 'easy');
 	}
 
-	render() {
+	render(): JSX.Element {
 		return (
 			<div className="main">
 				<div className="button-area">
