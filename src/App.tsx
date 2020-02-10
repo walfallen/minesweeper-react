@@ -19,8 +19,8 @@ interface AppState {
 }
 
 const modeConfig = new Map<string, ModeConfig>();
-modeConfig.set('expert', { width: 20, height: 30 });
-modeConfig.set('medium', { width: 15, height: 15 });
+modeConfig.set('expert', { width: 30, height: 20 });
+modeConfig.set('medium', { width: 15, height: 10 });
 modeConfig.set('easy', { width: 10, height: 8 });
 
 export default class App extends React.Component<{}, AppState> {

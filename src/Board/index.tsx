@@ -9,17 +9,41 @@ interface BoardProps {
 	height: number;
 }
 
+enum GameState {
+	Invalid,
+	Started,
+	Ended,
+}
+
 interface BoardState {
-	ended: boolean;
+	gameState: GameState;
 }
 
 export default class Board extends React.Component<BoardProps, BoardState> {
+	id: string;
+	key: string;
+
 	constructor(props: BoardProps) {
 		super(props);
 
+		this.id = '';
+		this.key = '';
+
 		this.state = {
-			ended: false,
+			gameState: GameState.Invalid,
 		};
+	}
+
+	async componentDidMount() {
+		const { width, height } = this.props;
+		const res = await window.fetch(`./api/room?width=${width}&height=${height}`, {
+			method: 'POST',
+		});
+		const room = await res.json();
+		this.id = room.id;
+		this.key = room.key;
+
+		this.setState({ gameState: GameState.Started });
 	}
 
 	render(): JSX.Element {
@@ -27,9 +51,6 @@ export default class Board extends React.Component<BoardProps, BoardState> {
 			width,
 			height,
 		} = this.props;
-		const {
-			ended,
-		} = this.state;
 
 		const squares: JSX.Element[] = [];
 		for (let j = 0; j < height; j++) {
