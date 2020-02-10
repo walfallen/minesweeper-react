@@ -1,7 +1,7 @@
 import * as React from 'react';
 
-import StartScene from './StartScene';
-import Board from './Board';
+import StartScene from './gui/StartScene';
+import Board from './gui/Board';
 
 enum Page {
 	StartPage = 'start-scene',
