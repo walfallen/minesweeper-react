@@ -1,10 +1,13 @@
 import * as React from 'react';
 
+import Room from './game/Room';
+
 import StartScene from './gui/StartScene';
 import Board from './gui/Board';
 
 enum Page {
 	StartPage = 'start-scene',
+	LoadPage = 'load',
 	BoardPage = 'board',
 }
 
@@ -15,7 +18,7 @@ interface ModeConfig {
 
 interface AppState {
 	page: Page;
-	config: ModeConfig;
+	room: Room | null;
 }
 
 const modeConfig = new Map<string, ModeConfig>();
@@ -29,34 +32,38 @@ export default class App extends React.Component<{}, AppState> {
 
 		this.state = {
 			page: Page.StartPage,
-			config: {
-				width: 0,
-				height: 0,
-			},
+			room: null,
 		};
 	}
 
-	handleModeChange = (mode: string): void => {
+	handleModeChange = async (mode: string): Promise<void> => {
 		const config = modeConfig.get(mode);
 		if (!config) {
 			return;
 		}
 
 		this.setState({
+			page: Page.LoadPage,
+		});
+
+		const room = new Room(config.width, config.height);
+		await room.create();
+
+		this.setState({
 			page: Page.BoardPage,
-			config,
+			room,
 		});
 	}
 
 	render(): JSX.Element {
 		const { page } = this.state;
-		const { config } = this.state;
+		const { room } = this.state;
 
 		return (
 			<div className={`app ${page}`}>
 				<h1>Minesweeper</h1>
 				{page === Page.StartPage && <StartScene onModeChanged={this.handleModeChange} />}
-				{page === Page.BoardPage && <Board width={config.width} height={config.height} /> }
+				{page === Page.BoardPage && room && <Board room={room} /> }
 			</div>
 		);
 	}

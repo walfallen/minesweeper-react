@@ -1,12 +1,13 @@
 import * as React from 'react';
 
+import Room from '../../game/Room';
+
 import Square from './Square';
 
 import './index.scss';
 
 interface BoardProps {
-	width: number;
-	height: number;
+	room: Room;
 }
 
 enum GameState {
@@ -20,42 +21,39 @@ interface BoardState {
 }
 
 export default class Board extends React.Component<BoardProps, BoardState> {
-	id: string;
-	key: string;
-
 	constructor(props: BoardProps) {
 		super(props);
 
-		this.id = '';
-		this.key = '';
-
 		this.state = {
-			gameState: GameState.Invalid,
+			gameState: GameState.Started,
 		};
 	}
 
-	async componentDidMount() {
-		const { width, height } = this.props;
-		const res = await window.fetch(`./api/room?width=${width}&height=${height}`, {
-			method: 'POST',
-		});
-		const room = await res.json();
-		this.id = room.id;
-		this.key = room.key;
+	handleClick = (x: number, y: number) => {
+		const { room } = this.props;
+		room.uncover(x, y);
+	}
 
-		this.setState({ gameState: GameState.Started });
+	handleContextMenu = (x: number, y: number) => {
+		const { room } = this.props;
+		room.flag(x, y);
 	}
 
 	render(): JSX.Element {
-		const {
-			width,
-			height,
-		} = this.props;
+		const { room } = this.props;
+		const width = room.getWidth();
+		const height = room.getHeight();
 
 		const squares: JSX.Element[] = [];
 		for (let j = 0; j < height; j++) {
 			for (let i = 0; i < width; i++) {
-				const sqr = <Square key={`${i}x${j}`} x={i} y={j} />;
+				const sqr = <Square
+					key={`${i}x${j}`}
+					x={i} y={j}
+					square={room.getSquare(i, j)}
+					onClick={this.handleClick}
+					onContextMenu={this.handleContextMenu}
+				/>;
 				squares.push(sqr);
 			}
 		}
