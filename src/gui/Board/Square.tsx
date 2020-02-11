@@ -29,7 +29,7 @@ export default class Square extends React.Component<SquareProps, SquareState> {
 		};
 	}
 
-	handleIndicatorChange = (indicator: number) => {
+	handleIndicatorChange = (indicator: number): void => {
 		this.setState({
 			uncovered: true,
 			indicator,
@@ -39,7 +39,7 @@ export default class Square extends React.Component<SquareProps, SquareState> {
 		}
 	}
 
-	handleClick = () => {
+	handleClick = (): void => {
 		const {
 			x,
 			y,
@@ -48,7 +48,15 @@ export default class Square extends React.Component<SquareProps, SquareState> {
 		onClick(x, y);
 	}
 
-	handleContextMenu = () => {
+	handleStatusChange = (status: Status): void => {
+		this.setState({
+			uncovered: status !== Status.None,
+			status,
+		});
+	}
+
+	handleContextMenu = (e: React.MouseEvent<HTMLDivElement, MouseEvent>): void => {
+		e.preventDefault();
 		const {
 			x,
 			y,
@@ -57,14 +65,16 @@ export default class Square extends React.Component<SquareProps, SquareState> {
 		onContextMenu(x, y);
 	}
 
-	componentDidMount() {
+	componentDidMount(): void {
 		const { square } = this.props;
 		square.on('indicatorChanged', this.handleIndicatorChange);
+		square.on('statusChanged', this.handleStatusChange);
 	}
 
-	componentWillUnmount() {
+	componentWillUnmount(): void {
 		const { square } = this.props;
 		square.off('indicatorChanged', this.handleIndicatorChange);
+		square.off('statusChanged', this.handleStatusChange);
 	}
 
 	render(): JSX.Element {
