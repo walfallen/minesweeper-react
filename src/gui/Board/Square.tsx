@@ -8,8 +8,8 @@ interface SquareProps {
 	x: number;
 	y: number;
 	square: GameSquare;
-	onClick: (x: number, y: number) => void;
-	onContextMenu: (x: number, y: number) => void;
+	onUncover: (x: number, y: number) => void;
+	onFlag: (x: number, y: number) => void;
 }
 
 interface SquareState {
@@ -29,42 +29,6 @@ export default class Square extends React.Component<SquareProps, SquareState> {
 		};
 	}
 
-	handleIndicatorChange = (indicator: number): void => {
-		this.setState({
-			uncovered: true,
-			indicator,
-		});
-		if (indicator < 0) {
-			this.setState({ status: Status.Bomb });
-		}
-	}
-
-	handleClick = (): void => {
-		const {
-			x,
-			y,
-			onClick,
-		} = this.props;
-		onClick(x, y);
-	}
-
-	handleStatusChange = (status: Status): void => {
-		this.setState({
-			uncovered: status !== Status.None,
-			status,
-		});
-	}
-
-	handleContextMenu = (e: React.MouseEvent<HTMLDivElement, MouseEvent>): void => {
-		e.preventDefault();
-		const {
-			x,
-			y,
-			onContextMenu,
-		} = this.props;
-		onContextMenu(x, y);
-	}
-
 	componentDidMount(): void {
 		const { square } = this.props;
 		square.on('indicatorChanged', this.handleIndicatorChange);
@@ -75,6 +39,65 @@ export default class Square extends React.Component<SquareProps, SquareState> {
 		const { square } = this.props;
 		square.off('indicatorChanged', this.handleIndicatorChange);
 		square.off('statusChanged', this.handleStatusChange);
+	}
+
+	handleIndicatorChange = (indicator: number): void => {
+		this.setState({
+			uncovered: true,
+			indicator,
+		});
+		if (indicator < 0) {
+			this.setState({ status: Status.Bomb });
+		}
+	}
+
+	handleClick = (e: React.MouseEvent<HTMLDivElement>): void => {
+		e.preventDefault();
+		this.uncover();
+	}
+
+	handleStatusChange = (status: Status): void => {
+		this.setState({
+			uncovered: status !== Status.None,
+			status,
+		});
+	}
+
+	handleContextMenu = (e: React.MouseEvent<HTMLDivElement>): void => {
+		e.preventDefault();
+		this.flag();
+	}
+
+	handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>): void => {
+		switch (e.key) {
+		case 'Enter':
+			this.uncover();
+			break;
+		case 'Space':
+			this.flag();
+			break;
+		default:
+			return;
+		}
+		e.preventDefault();
+	}
+
+	uncover(): void {
+		const {
+			x,
+			y,
+			onUncover,
+		} = this.props;
+		onUncover(x, y);
+	}
+
+	flag(): void {
+		const {
+			x,
+			y,
+			onFlag,
+		} = this.props;
+		onFlag(x, y);
 	}
 
 	render(): JSX.Element {
@@ -102,7 +125,14 @@ export default class Square extends React.Component<SquareProps, SquareState> {
 		}
 
 		return (
-			<div className={classNames.join(' ')} onClick={this.handleClick} onContextMenu={this.handleContextMenu}>
+			<div
+				className={classNames.join(' ')}
+				role="button"
+				tabIndex={0}
+				onClick={this.handleClick}
+				onContextMenu={this.handleContextMenu}
+				onKeyDown={this.handleKeyDown}
+			>
 				{indicator > 0 ? indicator : null}
 				{icon && <span className={icon} />}
 			</div>

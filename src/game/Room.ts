@@ -34,7 +34,7 @@ class Room {
 		return this.height;
 	}
 
-	async create() {
+	async create(): Promise<void> {
 		const res = await window.fetch(`./api/room?width=${this.width}&height=${this.height}`, { method: 'POST' });
 		const room = await res.json();
 		this.id = room.id;
@@ -46,7 +46,7 @@ class Room {
 		return this.squares[i];
 	}
 
-	async uncover(x: number, y: number) {
+	async uncover(x: number, y: number): Promise<void> {
 		if (!this.getSquare(x, y)) {
 			return;
 		}
@@ -62,7 +62,7 @@ class Room {
 		}
 	}
 
-	async flag(x: number, y: number) {
+	async flag(x: number, y: number): Promise<void> {
 		const square = this.getSquare(x, y);
 		if (!square) {
 			return;

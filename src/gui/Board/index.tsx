@@ -10,31 +10,13 @@ interface BoardProps {
 	room: Room;
 }
 
-enum GameState {
-	Invalid,
-	Started,
-	Ended,
-}
-
-interface BoardState {
-	gameState: GameState;
-}
-
-export default class Board extends React.Component<BoardProps, BoardState> {
-	constructor(props: BoardProps) {
-		super(props);
-
-		this.state = {
-			gameState: GameState.Started,
-		};
-	}
-
-	handleClick = (x: number, y: number) => {
+export default class Board extends React.Component<BoardProps, {}> {
+	handleUncover = (x: number, y: number): void => {
 		const { room } = this.props;
 		room.uncover(x, y);
 	}
 
-	handleContextMenu = (x: number, y: number) => {
+	handleFlag = (x: number, y: number): void => {
 		const { room } = this.props;
 		room.flag(x, y);
 	}
@@ -47,13 +29,16 @@ export default class Board extends React.Component<BoardProps, BoardState> {
 		const squares: JSX.Element[] = [];
 		for (let j = 0; j < height; j++) {
 			for (let i = 0; i < width; i++) {
-				const sqr = <Square
-					key={`${i}x${j}`}
-					x={i} y={j}
-					square={room.getSquare(i, j)}
-					onClick={this.handleClick}
-					onContextMenu={this.handleContextMenu}
-				/>;
+				const sqr = (
+					<Square
+						key={`${i}x${j}`}
+						x={i}
+						y={j}
+						square={room.getSquare(i, j)}
+						onUncover={this.handleUncover}
+						onFlag={this.handleFlag}
+					/>
+				);
 				squares.push(sqr);
 			}
 		}

@@ -46,9 +46,18 @@
 			"tab"
 		],
 		"linebreak-style": "off",
+		"no-continue": "off",
 		"no-plusplus": "off",
+		"no-restricted-syntax": [
+			"error",
+			"WithStatement"
+		],
 		"no-tabs": "off",
 		"react/jsx-indent": [
+			"error",
+			"tab"
+		],
+		"react/jsx-indent-props": [
 			"error",
 			"tab"
 		],
