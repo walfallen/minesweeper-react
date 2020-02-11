@@ -5,7 +5,7 @@
   "main": "src/index.tsx",
   "scripts": {
     "build": "webpack",
-    "start": "webpack-dev-server --open",
+    "start": "webpack-dev-server --open -d",
     "debug": "webpack --mode=development --watch",
     "test": "eslint --ext .ts,.tsx ."
   },
