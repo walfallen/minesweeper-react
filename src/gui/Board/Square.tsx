@@ -13,7 +13,6 @@ interface SquareProps {
 }
 
 interface SquareState {
-	uncovered: boolean;
 	status: Status;
 	indicator: number;
 }
@@ -23,8 +22,7 @@ export default class Square extends React.Component<SquareProps, SquareState> {
 		super(props);
 
 		this.state = {
-			uncovered: false,
-			status: Status.None,
+			status: Status.Covered,
 			indicator: 0,
 		};
 	}
@@ -42,13 +40,7 @@ export default class Square extends React.Component<SquareProps, SquareState> {
 	}
 
 	handleIndicatorChange = (indicator: number): void => {
-		this.setState({
-			uncovered: true,
-			indicator,
-		});
-		if (indicator < 0) {
-			this.setState({ status: Status.Bomb });
-		}
+		this.setState({ indicator });
 	}
 
 	handleClick = (e: React.MouseEvent<HTMLDivElement>): void => {
@@ -57,10 +49,7 @@ export default class Square extends React.Component<SquareProps, SquareState> {
 	}
 
 	handleStatusChange = (status: Status): void => {
-		this.setState({
-			uncovered: status !== Status.None,
-			status,
-		});
+		this.setState({	status });
 	}
 
 	handleContextMenu = (e: React.MouseEvent<HTMLDivElement>): void => {
@@ -102,26 +91,26 @@ export default class Square extends React.Component<SquareProps, SquareState> {
 
 	render(): JSX.Element {
 		const {
-			uncovered,
 			status,
 			indicator,
 		} = this.state;
+		const uncovered = status !== Status.Covered;
+		const bomb = indicator < 0;
 
-		let icon = null;
 		const classNames = ['square'];
 		if (uncovered) {
 			classNames.push('uncovered');
-
-			if (indicator > 0) {
+			if (indicator && indicator > 0) {
 				classNames.push(`indicator-${indicator}`);
-			}
-			if (status === Status.Flag) {
-				icon = 'flag';
 			}
 		}
 
-		if (status === Status.Bomb) {
-			icon = 'bomb';
+		const icon = [];
+		if (status === Status.Flagged) {
+			icon.push('flag');
+		}
+		if (bomb) {
+			icon.push('bomb');
 		}
 
 		return (
@@ -133,8 +122,8 @@ export default class Square extends React.Component<SquareProps, SquareState> {
 				onContextMenu={this.handleContextMenu}
 				onKeyDown={this.handleKeyDown}
 			>
-				{indicator > 0 ? indicator : null}
-				{icon && <span className={icon} />}
+				{indicator && indicator > 0 ? indicator : null}
+				{icon && <span className={icon.join(' ')} />}
 			</div>
 		);
 	}

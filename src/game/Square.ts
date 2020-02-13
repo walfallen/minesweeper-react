@@ -1,25 +1,33 @@
 import { EventEmitter } from 'events';
 
 export enum Status {
-	None,
-	Flag,
-	Bomb,
+	Covered,
+	Uncovered,
+	Flagged,
 }
 
 export default class Square extends EventEmitter {
 	private status: Status;
 
-	private indicator: number | undefined;
+	private indicator: number;
 
 	constructor() {
 		super();
 
-		this.status = Status.None;
+		this.status = Status.Covered;
 		this.indicator = 0;
 	}
 
 	isUncovered(): boolean {
-		return this.indicator !== undefined;
+		return this.status === Status.Uncovered;
+	}
+
+	isFlagged(): boolean {
+		return this.status === Status.Flagged;
+	}
+
+	isBomb(): boolean {
+		return this.indicator < 0;
 	}
 
 	setIndicator(indicator: number): void {
@@ -27,7 +35,7 @@ export default class Square extends EventEmitter {
 		this.emit('indicatorChanged', indicator);
 	}
 
-	getIndicator(): number | undefined {
+	getIndicator(): number {
 		return this.indicator;
 	}
 

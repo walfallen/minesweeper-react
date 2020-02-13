@@ -47,7 +47,8 @@ class Room {
 	}
 
 	async uncover(x: number, y: number): Promise<void> {
-		if (!this.getSquare(x, y)) {
+		const cur = this.getSquare(x, y);
+		if (!cur || cur.isFlagged()) {
 			return;
 		}
 
@@ -59,19 +60,22 @@ class Room {
 				continue;
 			}
 			square.setIndicator(sq.num);
+			square.setStatus(Status.Uncovered);
 		}
 	}
 
 	async flag(x: number, y: number): Promise<void> {
 		const square = this.getSquare(x, y);
-		if (!square) {
+		if (!square || square.isUncovered()) {
 			return;
 		}
 
 		const res = await window.fetch(`./api/room/${this.id}/square/${x}/${y}?key=${this.key}`, { method: 'PATCH' });
-		if (res.status === 200) {
-			square.setStatus(Status.Flag);
+		if (res.status !== 200) {
+			return;
 		}
+
+		square.setStatus(Status.Flagged);
 	}
 }
 
