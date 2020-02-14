@@ -1,6 +1,8 @@
+import { EventEmitter } from 'events';
+
 import Square, { Status } from './Square';
 
-class Room {
+class Room extends EventEmitter {
 	private id: string;
 
 	private key: string;
@@ -14,6 +16,8 @@ class Room {
 	private mineNum: number;
 
 	constructor(width: number, height: number) {
+		super();
+
 		this.id = '';
 		this.key = '';
 		this.width = width;
@@ -83,7 +87,13 @@ class Room {
 			return;
 		}
 
-		square.setStatus(Status.Flagged);
+		const status = Number.parseInt(await res.text(), 10);
+		if (Number.isNaN(status)) {
+			return;
+		}
+
+		square.setStatus(status);
+		this.emit('flagged', status === Status.Flagged);
 	}
 }
 
