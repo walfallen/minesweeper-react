@@ -1,0 +1,27 @@
+
+.info-panel {
+	text-align: center;
+	margin: 0 0 12px 0;
+
+	.flag,
+	.mine {
+		line-height: 2em;
+		display: inline-block;
+		color: white;
+		min-width: 3em;
+		text-align: left;
+		background-repeat: no-repeat;
+		background-size: 32px 32px;
+		background-position: left center;
+		padding-left: 3em;
+		margin: 0 32px;
+	}
+
+	.flag {
+		background-image: url(./flag.svg);
+	}
+
+	.mine {
+		background-image: url(./bomb.svg);
+	}
+}

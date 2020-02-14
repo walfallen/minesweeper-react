@@ -2,6 +2,7 @@ import * as React from 'react';
 
 import Room from '../../game/Room';
 
+import InfoPanel from './InfoPanel';
 import Square from './Square';
 
 import './index.scss';
@@ -48,8 +49,11 @@ export default class Board extends React.Component<BoardProps, {}> {
 		};
 
 		return (
-			<div className="board" style={style}>
-				{squares}
+			<div className="room">
+				<InfoPanel room={room} />
+				<div className="board" style={style}>
+					{squares}
+				</div>
 			</div>
 		);
 	}
