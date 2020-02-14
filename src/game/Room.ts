@@ -11,11 +11,14 @@ class Room {
 
 	private squares: Square[];
 
+	private mineNum: number;
+
 	constructor(width: number, height: number) {
 		this.id = '';
 		this.key = '';
 		this.width = width;
 		this.height = height;
+		this.mineNum = 0;
 
 		this.squares = new Array<Square>(width * height);
 		let h = 0;
@@ -34,11 +37,16 @@ class Room {
 		return this.height;
 	}
 
+	getMineNum(): number {
+		return this.mineNum;
+	}
+
 	async create(): Promise<void> {
 		const res = await window.fetch(`./api/room?width=${this.width}&height=${this.height}`, { method: 'POST' });
 		const room = await res.json();
 		this.id = room.id;
 		this.key = room.key;
+		this.mineNum = room.mineNum;
 	}
 
 	getSquare(x: number, y: number): Square {
