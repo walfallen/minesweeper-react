@@ -48,6 +48,15 @@
 		}
 	}
 
+	&.heart {
+		background: url(./heart.svg) no-repeat;
+		background-repeat: no-repeat;
+    background-size: 200%;
+    background-position: center;
+    color: white;
+		text-shadow: white 0 0 4px;
+	}
+
 	span {
 		width: 48px;
 		height: 48px;

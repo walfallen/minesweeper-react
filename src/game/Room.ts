@@ -2,6 +2,8 @@ import { EventEmitter } from 'events';
 
 import Square, { Status } from './Square';
 
+const valentineText = 'これからもたくさんの思い出を作ろう！カズ＆ユウ';
+
 class Room extends EventEmitter {
 	private id: string;
 
@@ -13,6 +15,10 @@ class Room extends EventEmitter {
 
 	private squares: Square[];
 
+	private uncoveredNum: number;
+
+	private flagNum: number;
+
 	private mineNum: number;
 
 	constructor(width: number, height: number) {
@@ -22,6 +28,8 @@ class Room extends EventEmitter {
 		this.key = '';
 		this.width = width;
 		this.height = height;
+		this.uncoveredNum = 0;
+		this.flagNum = 0;
 		this.mineNum = 0;
 
 		this.squares = new Array<Square>(width * height);
@@ -68,11 +76,29 @@ class Room extends EventEmitter {
 		const squares = await res.json();
 		for (const sq of squares) {
 			const square = this.getSquare(sq.x, sq.y);
-			if (!square) {
+			if (!square || square.isUncovered()) {
 				continue;
 			}
 			square.setIndicator(sq.num);
 			square.setStatus(Status.Uncovered);
+			this.uncoveredNum++;
+		}
+
+		this.checkGameOver();
+	}
+
+	checkGameOver(): void {
+		if (this.uncoveredNum + this.flagNum < this.squares.length) {
+			return;
+		}
+
+		const squares = this.squares.filter((square) => square.isFlagged());
+		if (squares.length < valentineText.length) {
+			return;
+		}
+
+		for (let i = 0; i < valentineText.length; i++) {
+			squares[i].setText(valentineText.charAt(i));
 		}
 	}
 
@@ -93,7 +119,14 @@ class Room extends EventEmitter {
 		}
 
 		square.setStatus(status);
-		this.emit('flagged', status === Status.Flagged);
+		if (status === Status.Flagged) {
+			this.emit('flagged', true);
+			this.flagNum++;
+			this.checkGameOver();
+		} else {
+			this.emit('flagged', false);
+			this.flagNum--;
+		}
 	}
 }
 

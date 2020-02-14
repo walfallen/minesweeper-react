@@ -11,11 +11,14 @@ export default class Square extends EventEmitter {
 
 	private indicator: number;
 
+	private text: string;
+
 	constructor() {
 		super();
 
 		this.status = Status.Covered;
 		this.indicator = 0;
+		this.text = '';
 	}
 
 	isUncovered(): boolean {
@@ -46,5 +49,14 @@ export default class Square extends EventEmitter {
 
 	getStatus(): Status {
 		return this.status;
+	}
+
+	setText(text: string): void {
+		this.text = text;
+		this.emit('textChanged', text);
+	}
+
+	getText(): string {
+		return this.text;
 	}
 }

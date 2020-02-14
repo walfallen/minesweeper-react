@@ -15,6 +15,7 @@ interface SquareProps {
 interface SquareState {
 	status: Status;
 	indicator: number;
+	text: string;
 }
 
 export default class Square extends React.Component<SquareProps, SquareState> {
@@ -24,6 +25,7 @@ export default class Square extends React.Component<SquareProps, SquareState> {
 		this.state = {
 			status: Status.Covered,
 			indicator: 0,
+			text: '',
 		};
 	}
 
@@ -31,12 +33,14 @@ export default class Square extends React.Component<SquareProps, SquareState> {
 		const { square } = this.props;
 		square.on('indicatorChanged', this.handleIndicatorChange);
 		square.on('statusChanged', this.handleStatusChange);
+		square.on('textChanged', this.handleTextChange);
 	}
 
 	componentWillUnmount(): void {
 		const { square } = this.props;
 		square.off('indicatorChanged', this.handleIndicatorChange);
 		square.off('statusChanged', this.handleStatusChange);
+		square.off('textChanged', this.handleTextChange);
 	}
 
 	handleIndicatorChange = (indicator: number): void => {
@@ -71,6 +75,10 @@ export default class Square extends React.Component<SquareProps, SquareState> {
 		e.preventDefault();
 	}
 
+	handleTextChange = (text: string): void => {
+		this.setState({ text });
+	}
+
 	uncover(): void {
 		const {
 			x,
@@ -93,11 +101,14 @@ export default class Square extends React.Component<SquareProps, SquareState> {
 		const {
 			status,
 			indicator,
+			text,
 		} = this.state;
 		const uncovered = status !== Status.Covered;
 		const bomb = indicator < 0;
 
 		const classNames = ['square'];
+		const icon = [];
+
 		if (uncovered) {
 			classNames.push('uncovered');
 			if (indicator && indicator > 0) {
@@ -105,9 +116,12 @@ export default class Square extends React.Component<SquareProps, SquareState> {
 			}
 		}
 
-		const icon = [];
 		if (status === Status.Flagged) {
-			icon.push('flag');
+			if (text) {
+				classNames.push('heart');
+			} else {
+				icon.push('flag');
+			}
 		}
 		if (bomb) {
 			icon.push('bomb');
@@ -123,7 +137,7 @@ export default class Square extends React.Component<SquareProps, SquareState> {
 				onKeyDown={this.handleKeyDown}
 			>
 				{indicator && indicator > 0 ? indicator : null}
-				{icon && <span className={icon.join(' ')} />}
+				{icon && <span className={icon.join(' ')}>{text}</span>}
 			</div>
 		);
 	}
