@@ -84,9 +84,12 @@ class Room extends EventEmitter {
 				continue;
 			}
 			square.setIndicator(sq.num);
-			square.setStatus(Status.Uncovered);
+			if (sq.num >= 0) {
+				square.setStatus(Status.Uncovered);
+			}
 			this.uncoveredNum++;
 		}
+		cur.setStatus(Status.Uncovered);
 
 		this.checkGameOver();
 	}

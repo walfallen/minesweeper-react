@@ -75,6 +75,10 @@
 	}
 
 	&.bomb {
+		&.uncovered {
+			background: radial-gradient(#ff8f8f, #fa3838);
+		}
+
 		.content {
 			background-image: url(./bomb.svg);
 		}

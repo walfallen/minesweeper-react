@@ -107,17 +107,18 @@ export default class Square extends React.Component<SquareProps, SquareState> {
 		const classNames = ['square'];
 		if (status === Status.Uncovered) {
 			classNames.push('uncovered');
-			if (indicator && indicator > 0) {
-				classNames.push(`indicator-${indicator}`);
-			} else if (indicator < 0) {
-				classNames.push('bomb');
-			}
 		} else if (status === Status.Flagged) {
 			if (text) {
 				classNames.push('heart');
 			} else {
 				classNames.push('flag');
 			}
+		}
+
+		if (indicator && indicator > 0) {
+			classNames.push(`indicator-${indicator}`);
+		} else if (indicator < 0) {
+			classNames.push('bomb');
 		}
 
 		return (
