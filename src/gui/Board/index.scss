@@ -1,8 +1,17 @@
-.board {
-	margin: auto;
+.room {
+	.panel-area {
+		display: flex;
+		flex-direction: row;
+		justify-content: center;
+	}
 
-	.square {
-		margin: 5px;
-		display: inline-block;
+	.board {
+		margin: auto;
+
+		.square {
+			margin: 5px;
+			display: inline-block;
+		}
 	}
 }
+

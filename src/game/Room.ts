@@ -59,6 +59,12 @@ class Room extends EventEmitter {
 		this.mineNum = room.mineNum;
 	}
 
+	async exit(): Promise<void> {
+		this.squares = [];
+		this.mineNum = 0;
+		await window.fetch(`./api/room/${this.id}?key=${this.key}`, { method: 'DELETE' });
+	}
+
 	getSquare(x: number, y: number): Square {
 		const i = y * this.width + x;
 		return this.squares[i];

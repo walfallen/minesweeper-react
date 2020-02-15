@@ -1,0 +1,11 @@
+.control-panel {
+	button {
+		font-size: 10pt;
+		padding: 0.5em 2em;
+		text-transform: uppercase;
+
+		&.exit {
+			background: radial-gradient(#fc9c84, #f27171);
+		}
+	}
+}

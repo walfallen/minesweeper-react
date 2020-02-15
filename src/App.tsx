@@ -55,6 +55,10 @@ export default class App extends React.Component<{}, AppState> {
 		});
 	}
 
+	handleExit = (): void => {
+		this.setState({ page: Page.StartPage });
+	}
+
 	render(): JSX.Element {
 		const { page } = this.state;
 		const { room } = this.state;
@@ -63,7 +67,7 @@ export default class App extends React.Component<{}, AppState> {
 			<div className={`app ${page}`}>
 				<h1>Minesweeper</h1>
 				{page === Page.StartPage && <StartScene onModeChanged={this.handleModeChange} />}
-				{page === Page.BoardPage && room && <Board room={room} /> }
+				{page === Page.BoardPage && room && <Board room={room} onExit={this.handleExit} /> }
 			</div>
 		);
 	}

@@ -3,12 +3,14 @@ import * as React from 'react';
 import Room from '../../game/Room';
 
 import InfoPanel from './InfoPanel';
+import ControlPanel from './ControlPanel';
 import Square from './Square';
 
 import './index.scss';
 
 interface BoardProps {
 	room: Room;
+	onExit: () => void;
 }
 
 export default class Board extends React.Component<BoardProps, {}> {
@@ -20,6 +22,13 @@ export default class Board extends React.Component<BoardProps, {}> {
 	handleFlag = (x: number, y: number): void => {
 		const { room } = this.props;
 		room.flag(x, y);
+	}
+
+	handleExit = async (): Promise<void> => {
+		const { room } = this.props;
+		await room.exit();
+		const { onExit } = this.props;
+		setTimeout(onExit, 0);
 	}
 
 	render(): JSX.Element {
@@ -50,7 +59,10 @@ export default class Board extends React.Component<BoardProps, {}> {
 
 		return (
 			<div className="room">
-				<InfoPanel room={room} />
+				<div className="panel-area">
+					<InfoPanel room={room} />
+					<ControlPanel onExit={this.handleExit} />
+				</div>
 				<div className="board" style={style}>
 					{squares}
 				</div>
