@@ -2,8 +2,6 @@ import { EventEmitter } from 'events';
 
 import Square, { Status } from './Square';
 
-const valentineText = 'これからもたくさんの思い出を作ろう！カズ＆ユウ';
-
 class Room extends EventEmitter {
 	private id: string;
 
@@ -92,13 +90,20 @@ class Room extends EventEmitter {
 			return;
 		}
 
+		const now = new Date();
+		if (now.getDate() === 14 && now.getMonth() === 1) {
+			this.showText('これからもたくさんの思い出を作ろう！カズ＆ユウ');
+		}
+	}
+
+	showText(text: string): void {
 		const squares = this.squares.filter((square) => square.isFlagged());
-		if (squares.length < valentineText.length) {
+		if (squares.length < text.length) {
 			return;
 		}
 
-		for (let i = 0; i < valentineText.length; i++) {
-			squares[i].setText(valentineText.charAt(i));
+		for (let i = 0; i < text.length; i++) {
+			squares[i].setText(text.charAt(i));
 		}
 	}
 
