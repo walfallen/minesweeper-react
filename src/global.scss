@@ -10,6 +10,14 @@ body {
 	font-family: Verdana, Tahoma, sans-serif;
 }
 
+button {
+	background: radial-gradient(#84d6fc, #71acf2);
+	color: rgb(34, 34, 34);
+	border: 0 solid;
+	border-radius: 6px;
+	cursor: pointer;
+}
+
 #root {
 	background: linear-gradient(#0d1114, #252729 14%, #31363c 100%) no-repeat;
 
