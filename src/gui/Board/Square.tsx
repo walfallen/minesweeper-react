@@ -103,28 +103,21 @@ export default class Square extends React.Component<SquareProps, SquareState> {
 			indicator,
 			text,
 		} = this.state;
-		const uncovered = status !== Status.Covered;
-		const bomb = indicator < 0;
 
 		const classNames = ['square'];
-		const icon = [];
-
-		if (uncovered) {
+		if (status === Status.Uncovered) {
 			classNames.push('uncovered');
 			if (indicator && indicator > 0) {
 				classNames.push(`indicator-${indicator}`);
+			} else if (indicator < 0) {
+				classNames.push('bomb');
 			}
-		}
-
-		if (status === Status.Flagged) {
+		} else if (status === Status.Flagged) {
 			if (text) {
 				classNames.push('heart');
 			} else {
-				icon.push('flag');
+				classNames.push('flag');
 			}
-		}
-		if (bomb) {
-			icon.push('bomb');
 		}
 
 		return (
@@ -137,7 +130,7 @@ export default class Square extends React.Component<SquareProps, SquareState> {
 				onKeyDown={this.handleKeyDown}
 			>
 				{indicator && indicator > 0 ? indicator : null}
-				{icon && <span className={icon.join(' ')}>{text}</span>}
+				<span className="content">{text}</span>
 			</div>
 		);
 	}

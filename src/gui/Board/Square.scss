@@ -48,6 +48,15 @@
 		}
 	}
 
+	.content {
+		width: 48px;
+		height: 48px;
+		display: inline-block;
+		background-repeat: no-repeat;
+		background-size: 70%;
+		background-position: center center;
+	}
+
 	&.heart {
 		background: url(./heart.svg) no-repeat;
 		background-repeat: no-repeat;
@@ -57,19 +66,16 @@
 		text-shadow: white 0 0 4px;
 	}
 
-	span {
-		width: 48px;
-		height: 48px;
-		display: inline-block;
-		background-repeat: no-repeat;
-		background-size: 70%;
-		background-position: center center;
+	&.flag {
+		background: radial-gradient(#ffff8f, #faf738);
 
-		&.flag {
+		.content {
 			background-image: url(./flag.svg);
 		}
+	}
 
-		&.bomb {
+	&.bomb {
+		.content {
 			background-image: url(./bomb.svg);
 		}
 	}
