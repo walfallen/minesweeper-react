@@ -1,11 +1,24 @@
 import { EventEmitter } from 'events';
 
 import Square, { Status } from './Square';
+import idle from '../util/idle';
 
 interface SquareData {
 	x: number;
 	y: number;
 	num: number;
+}
+
+function sortSquaresAt(x: number, y: number, squares: SquareData[]): void {
+	squares.sort((a: SquareData, b: SquareData) => {
+		const ax = a.x - x;
+		const ay = a.y - y;
+		const da = ax * ax + ay * ay;
+		const bx = b.x - x;
+		const by = b.y - y;
+		const db = bx * bx + by * by;
+		return da - db;
+	});
 }
 
 class Room extends EventEmitter {
@@ -88,8 +101,11 @@ class Room extends EventEmitter {
 
 		const res = await window.fetch(`./api/room/${this.id}/square/${x}/${y}?key=${this.key}`, { method: 'POST' });
 		const squares = await res.json();
-		this.updateSquares(squares);
-		cur.setStatus(Status.Uncovered);
+		sortSquaresAt(x, y, squares);
+		await this.updateSquares(squares);
+		if (cur.getStatus() === Status.Covered) {
+			cur.setStatus(Status.Uncovered);
+		}
 
 		this.checkGameOver();
 	}
@@ -102,7 +118,8 @@ class Room extends EventEmitter {
 
 		const res = await window.fetch(`./api/room/${this.id}/outspread?key=${this.key}&x=${x}&y=${y}`, { method: 'POST' });
 		const squares = await res.json();
-		this.updateSquares(squares);
+		sortSquaresAt(x, y, squares);
+		await this.updateSquares(squares);
 
 		for (let dx = -1; dx <= 1; dx++) {
 			for (let dy = -1; dy <= 1; dy++) {
@@ -120,18 +137,19 @@ class Room extends EventEmitter {
 		this.checkGameOver();
 	}
 
-	updateSquares(squares: SquareData[]): void {
-		for (const sq of squares) {
+	async updateSquares(squares: SquareData[]): Promise<void> {
+		await Promise.all(squares.map(async (sq) => {
+			await idle(0);
 			const square = this.getSquare(sq.x, sq.y);
 			if (!square || square.isUncovered()) {
-				continue;
+				return;
 			}
 			square.setIndicator(sq.num);
 			if (sq.num >= 0) {
 				square.setStatus(Status.Uncovered);
 			}
 			this.uncoveredNum++;
-		}
+		}));
 	}
 
 	checkGameOver(): void {
