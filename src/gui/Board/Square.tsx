@@ -4,12 +4,15 @@ import GameSquare, { Status } from '../../game/Square';
 
 import './Square.scss';
 
+type SquareAction = (x: number, y: number) => void;
+
 interface SquareProps {
 	x: number;
 	y: number;
 	square: GameSquare;
-	onUncover: (x: number, y: number) => void;
-	onFlag: (x: number, y: number) => void;
+	onUncover: SquareAction;
+	onOutspread: SquareAction;
+	onFlag: SquareAction;
 }
 
 interface SquareState {
@@ -52,6 +55,11 @@ export default class Square extends React.Component<SquareProps, SquareState> {
 		this.uncover();
 	}
 
+	handleDoubleClick = (e: React.MouseEvent<HTMLDivElement>): void => {
+		e.preventDefault();
+		this.outspread();
+	}
+
 	handleStatusChange = (status: Status): void => {
 		this.setState({	status });
 	}
@@ -86,6 +94,15 @@ export default class Square extends React.Component<SquareProps, SquareState> {
 			onUncover,
 		} = this.props;
 		onUncover(x, y);
+	}
+
+	outspread(): void {
+		const {
+			x,
+			y,
+			onOutspread,
+		} = this.props;
+		onOutspread(x, y);
 	}
 
 	flag(): void {
@@ -127,6 +144,7 @@ export default class Square extends React.Component<SquareProps, SquareState> {
 				role="button"
 				tabIndex={0}
 				onClick={this.handleClick}
+				onDoubleClick={this.handleDoubleClick}
 				onContextMenu={this.handleContextMenu}
 				onKeyDown={this.handleKeyDown}
 			>

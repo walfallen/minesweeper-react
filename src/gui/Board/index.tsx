@@ -19,6 +19,11 @@ export default class Board extends React.Component<BoardProps, {}> {
 		room.uncover(x, y);
 	}
 
+	handleOutspread = (x: number, y: number): void => {
+		const { room } = this.props;
+		room.outspread(x, y);
+	}
+
 	handleFlag = (x: number, y: number): void => {
 		const { room } = this.props;
 		room.flag(x, y);
@@ -39,13 +44,19 @@ export default class Board extends React.Component<BoardProps, {}> {
 		const squares: JSX.Element[] = [];
 		for (let j = 0; j < height; j++) {
 			for (let i = 0; i < width; i++) {
+				const square = room.getSquare(i, j);
+				if (!square) {
+					continue;
+				}
+
 				const sqr = (
 					<Square
 						key={`${i}x${j}`}
 						x={i}
 						y={j}
-						square={room.getSquare(i, j)}
+						square={square}
 						onUncover={this.handleUncover}
+						onOutspread={this.handleOutspread}
 						onFlag={this.handleFlag}
 					/>
 				);

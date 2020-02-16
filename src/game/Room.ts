@@ -2,6 +2,12 @@ import { EventEmitter } from 'events';
 
 import Square, { Status } from './Square';
 
+interface SquareData {
+	x: number;
+	y: number;
+	num: number;
+}
+
 class Room extends EventEmitter {
 	private id: string;
 
@@ -65,7 +71,11 @@ class Room extends EventEmitter {
 		await window.fetch(`./api/room/${this.id}?key=${this.key}`, { method: 'DELETE' });
 	}
 
-	getSquare(x: number, y: number): Square {
+	getSquare(x: number, y: number): Square | null {
+		if (x < 0 || y < 0 || x >= this.width || y >= this.height) {
+			return null;
+		}
+
 		const i = y * this.width + x;
 		return this.squares[i];
 	}
@@ -78,6 +88,39 @@ class Room extends EventEmitter {
 
 		const res = await window.fetch(`./api/room/${this.id}/square/${x}/${y}?key=${this.key}`, { method: 'POST' });
 		const squares = await res.json();
+		this.updateSquares(squares);
+		cur.setStatus(Status.Uncovered);
+
+		this.checkGameOver();
+	}
+
+	async outspread(x: number, y: number): Promise<void> {
+		const cur = this.getSquare(x, y);
+		if (!cur || !cur.isUncovered() || cur.getIndicator() <= 0) {
+			return;
+		}
+
+		const res = await window.fetch(`./api/room/${this.id}/outspread?key=${this.key}&x=${x}&y=${y}`, { method: 'POST' });
+		const squares = await res.json();
+		this.updateSquares(squares);
+
+		for (let dx = -1; dx <= 1; dx++) {
+			for (let dy = -1; dy <= 1; dy++) {
+				if (dx === 0 && dy === 0) {
+					continue;
+				}
+
+				const sqr = this.getSquare(x + dx, y + dy);
+				if (sqr && sqr.getStatus() === Status.Covered && sqr.isBomb()) {
+					sqr.setStatus(Status.Uncovered);
+				}
+			}
+		}
+
+		this.checkGameOver();
+	}
+
+	updateSquares(squares: SquareData[]): void {
 		for (const sq of squares) {
 			const square = this.getSquare(sq.x, sq.y);
 			if (!square || square.isUncovered()) {
@@ -89,9 +132,6 @@ class Room extends EventEmitter {
 			}
 			this.uncoveredNum++;
 		}
-		cur.setStatus(Status.Uncovered);
-
-		this.checkGameOver();
 	}
 
 	checkGameOver(): void {
