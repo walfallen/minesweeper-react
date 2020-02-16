@@ -64,8 +64,20 @@ export default class Board extends React.Component<BoardProps, {}> {
 			}
 		}
 
-		const style = {
-			width: `${width * 58}px`,
+		const padding = 20;
+		const maxWidth = document.documentElement.clientWidth - padding * 2;
+		const curWidth = width * 58;
+		const scale = maxWidth / curWidth;
+		const curHeight = height * 58;
+
+		const boardAreaStyle = {
+			maxWidth: scale < 1 ? `${curWidth * scale}px` : undefined,
+			maxHeight: scale < 1 ? `${curHeight * scale}px` : undefined,
+		};
+
+		const boardStyle = {
+			width: `${curWidth}px`,
+			transform: scale < 1 ? `scale(${scale})` : undefined,
 		};
 
 		return (
@@ -74,8 +86,10 @@ export default class Board extends React.Component<BoardProps, {}> {
 					<InfoPanel room={room} />
 					<ControlPanel onExit={this.handleExit} />
 				</div>
-				<div className="board" style={style}>
-					{squares}
+				<div className="board-area" style={boardAreaStyle}>
+					<div className="board" style={boardStyle}>
+						{squares}
+					</div>
 				</div>
 			</div>
 		);

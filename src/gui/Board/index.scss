@@ -1,13 +1,20 @@
 .room {
+	padding: 0 10px;
+
 	.panel-area {
 		display: flex;
 		flex-direction: row;
 		justify-content: center;
 	}
 
+	.board-area {
+		overflow: hidden;
+	}
+
 	.board {
 		margin: auto;
 		user-select: none;
+		transform-origin: top left;
 
 		.square {
 			margin: 5px;
