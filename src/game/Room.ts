@@ -95,7 +95,7 @@ class Room extends EventEmitter {
 
 	async uncover(x: number, y: number): Promise<void> {
 		const cur = this.getSquare(x, y);
-		if (!cur || cur.isFlagged()) {
+		if (!cur || cur.isFlagged() || cur.isBomb()) {
 			return;
 		}
 
