@@ -11,6 +11,14 @@
 	cursor: pointer;
 	vertical-align: top;
 
+	&:focus {
+		outline: none;
+	}
+
+	&:hover {
+		box-shadow: rgb(255, 250, 182) 0 0 3px 1px;
+	}
+
 	&.uncovered {
 		background: radial-gradient(#ffffff, #d2d6d5);
 		text-shadow: rgb(80, 80, 80) 0 0 3px;
